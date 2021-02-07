@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board</title>
+  <link rel="shortcut icon" href="/faviconico" type="image/x-icon">
+  <link rel="icon" href="/faviconico" type="image/x-icon">
+  <script src="/jquery"></script>
+  <style>
+    @font-face {
+      src: url("/font");
+      font-family: "main-font";
+    }
+
+    .board-panel .board-list div {
+      display: inline-block;
+    }
+
+    .board-panel {
+      width: 800px;
+      margin: auto;
+      vertical-align: middle;
+      border: 1px solid black;
+      box-shadow: 5px 5px 5px;
+      padding: 15px;
+      margin-top: 170px;
+      background-color: #181b33;
+    }
+
+
+    .board-boardno {
+      color: white;
+      width: 50px;
+      text-align: center;
+    }
+
+    .board-title {
+      width: 600px;
+      color: white;
+    }
+
+    .board-title a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .board-userid {
+      width: 100px;
+      color: white;
+    }
+
+    div form,
+    div button {
+      text-align: right;
+    }
+
+    #write {
+      color: white;
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+    }
+
+    #write:hover {
+      font-weight: bold;
+    }
+
+    #searchbtn {
+      margin-left: 3px;
+      border: 0;
+      background-color: #181b33;
+      width: 45px;
+      height: 30px;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      border-radius: 10px;
+    }
+
+    #search-panel {
+      height: 25px;
+    }
+
+    .main-title {
+      font-size: 50px;
+      text-align: center;
+      color: white;
+      font-family: "main-font";
+    }
+
+    body {
+      background-image: url('/boardimage');
+      background-size: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <header id="total-header"></header>
+  </div>
+  <div class="board-panel">
+    <div class="main-title"> Board</div>
+    <div style="margin-bottom: 12px;margin-top: 12px;">
+      <form action="/searchBoard" method="post"><input type="text" placeholder="제목" name="searchBoard"
+          id="search-panel"><button id="searchbtn">검색</button></form>
+    </div>
+    <hr>
+    <% for(let i=0;i<(data.length);i++){ %>
+      <div class="board-list">
+        <div class="board-boardno">
+          <%=data[i].boardno%><input type="hidden" name="title" value="<%=data[i].boardno%>">
+        </div>
+        <div class="board-title"><a href="/selectBoard.html/<%=data[i].boardno%>">
+            <%=data[i].title%>
+          </a></div>
+        <div class="board-userid">
+          <%=data[i].userid%>
+        </div>
+      </div>
+      <hr>
+      <% } %>
+        <div onclick="writeForm()" id="write">작성하기</div>
+  </div>
+  <script>
+    function upclick() {
+      location.href = "/board/up";
+    }
+    function writeForm() {
+      location.href = '/write.html';
+    }
+    $(document).ready(function () {
+      $("#total-header").load("/header.html")
+    });
+  </script>
+</body>
+
+</html>

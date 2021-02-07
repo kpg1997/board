@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot</title>
+    <link rel="stylesheet" href="/loginCss">
+    <script src="/jquery"></script>
+</head>
+
+<body>
+    <div class="forgot-panel">
+        <form action="/forgotId" method="post" name="formId">
+            <div class="find-id-panel">
+                <div class="find-panel">아이디 찾기</div>
+                <div class="input-panel">
+                    <div><input type="text" placeholder="Name" id="find-id-name" name="username"></div>
+                    <div><input type="email" placeholder="Email" id="find-id-email" name="useremail"></div>
+                </div>
+                <button class="find-btns" id="find-id-btn" onclick="findUserID()">아이디 찾기</button>
+        </form>
+    </div>
+    <div class="find-pwd-panel">
+        <form action="/forgotPwd" method="post" name="formPwd">
+            <div class="find-panel">비밀번호 찾기</div>
+            <div class="input-panel">
+                <div><input type="id" placeholder="ID" id="find-pwd-id" name="userid"></div>
+                <div><input type="text" placeholder="Name" id="find-pwd-name" name="username"></div>
+                <div><input type="email" placeholder="Email" id="find-pwd-email" name="useremail"></div>
+            </div>
+            <button class="find-btns" id="find-pwd-btn" onclick="findUserPwd()">비밀번호 찾기</button>
+        </form>
+    </div>
+    <div class="show-user-id-pwd">
+        <form action="/forgotId" method="get">
+            <div>아이디 : <div id="show-user-id" style=" display: inline-block;color: white;">
+                    <%=data[0].userid%>
+                </div>
+            </div>
+        </form>
+        <form action="/forgotPwd" method="get">
+            <div>비밀번호 : <div id="show-user-pwd"  style=" display: inline-block;color: white;">
+                    <%=data[0].userpwd%>
+                </div>
+            </div>
+        </form>
+        드래그하시면 보입니다.
+    </div>
+    </div>
+    <script src="/loginjs"></script>
+</body>
+
+</html>

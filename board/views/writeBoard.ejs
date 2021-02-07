@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/faviconico" type="image/x-icon">
+    <link rel="icon" href="/faviconico" type="image/x-icon">
+    <script src="/jquery"></script>
+    <title>게시판 만들기</title>
+    <style>
+        @font-face {
+            src: url("/font");
+            font-family: "main-font";
+        }
+
+        .write-board-panel {
+            width: 800px;
+            margin: auto;
+            vertical-align: middle;
+            border: 1px solid black;
+            box-shadow: 5px 5px 5px;
+            padding: 15px;
+            margin-top: 170px;
+            background-color: #181b33;
+        }
+
+        .buttons {
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 15px;
+            color: white;
+        }
+
+        body {
+            background-image: url('/boardimage');
+            background-size: cover;
+        }
+
+        .button:hover {
+            font-weight: bold;
+        }
+
+        .ti,
+        .user,
+        .con {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <header id="total-header"></header>
+    </div>
+    <div class="write-board-panel">
+        <form action="/write" name="writeForm" method="POST">
+
+            <div class="ti">제목 : <input type="text" name="title" id="boardtitle"></div>
+            <div class="user">작성자 : <%=data%><input type="hidden" name="userid" id="boardwrite" value="<%=data%>"></div>
+            <div class="con">내용 :<br> <textarea type="text" name="content" id="boardcontent" cols="100"
+                    rows="10"></textarea></div>
+
+        </form>
+        <div class="buttons">
+            <div onclick="writeBoard()" class="button">작성하기</div>
+            <div onclick="history.back()" class="button">뒤로가기</div>
+        </div>
+    </div>
+    <script>
+        function writeBoard() {
+            var title = document.getElementById('boardtitle').value;
+            var content = document.getElementById('boardcontent').value;
+            if ((title != "") & (content != "")) {
+                var con = confirm("작성하시겠습니까?");
+                if (con == true) {
+                    writeForm.submit() = "/write"
+                }
+            } else {
+                alert('제목과 내용을 입력하시오')
+            }
+        }
+        $(document).ready(function () {
+            $("#total-header").load("/header.html")
+        });
+    </script>
+</body>
+
+</html>
