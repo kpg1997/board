@@ -65,6 +65,7 @@ app.get('/totalfooter.html', function (request, response) {
         response.send(data);
     });
 });
+
 //index
 app.use('/indexjs', express.static(__dirname + '/index/index.js'));
 app.use('/indexsource', express.static(__dirname + '/index/images/밤하늘영상2.mp4'))
@@ -93,10 +94,13 @@ app.use('/locationjs', express.static(__dirname + '/location/location.js'));
 app.use('/locationcss', express.static(__dirname + '/location/location.css'));
 // app.use('/map', express.static('//dapi.kakao.com/v2/maps/sdk.js?appkey=cb2ddce9c272d8e533706240faf2a4b7'));
 
+//issue
+app.use('/issuejs', express.static(__dirname + '/issue/issue.js'));
+app.use('/issuecss', express.static(__dirname + '/issue/issue.css'));
+
+
 
 // 서버를 실행합니다.
-
-
 app.get('/index.html', function (request, response) {
     // response.render('index');
     // 파일을 읽습니다.
@@ -123,6 +127,11 @@ app.get('/header.html', function (request, response) {
     });
 });
 
+app.get('/issue.html', function(request, response){
+    fs.readFile(__dirname + '/issue/issue.html', 'utf8', function(error,data){
+        response.send(data);
+    })
+})
 
 app.get('/login.html', function (request, response) {
     // response.render('index');
@@ -479,8 +488,6 @@ app.get('/GIORGI_3', function (req, res) {
     fs.readFile(__dirname + '/brandIntro/images/GIORGI_3.jpg', function (error, data) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(data);
-
-
     });
 });
 app.get('/PATEK_LOGO', function (req, res) {
@@ -511,11 +518,17 @@ app.get('/PATEK_3', function (req, res) {
     fs.readFile(__dirname + '/brandIntro/images/PATEK_3.jpg', function (error, data) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(data);
-
-
     });
 });
+
 /*브랜드 이미지*/
+
+app.get('/issuebg', function(req,res){
+    fs.readFile(__dirname + '/issue/image/issuebg.jpg', function(error,data){
+        res.writeHead(200, { 'Content-Type': 'text/html'});
+        res.end(data);
+    });
+});
 
 app.get('/forgot.html', function (request, response) {
     // response.render('index');
