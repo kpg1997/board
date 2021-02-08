@@ -1,0 +1,82 @@
+#videobcg {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+    overflow: hidden;
+}
+
+@font-face {
+    src: url("/font");
+    font-family: "main-font";
+  }
+
+  .qna-panel .qna-list div {
+    display: inline-block;
+  }
+  .main-title {
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    font-family: "main-font";
+  }
+
+  .qna-panel {
+    width: 800px;
+    margin: auto;
+    vertical-align: middle;
+    border: 1px solid black;
+    box-shadow: 5px 5px 5px;
+    padding: 15px;
+    margin-top: 170px;
+    background-color: #181b33;
+    margin-bottom: 25%;
+  }
+
+
+  .qna-qnano {
+    color: white;
+    width: 50px;
+    text-align: center;
+  }
+
+  .qna-title {
+    width: 600px;
+    color: white;
+  }
+
+  .qna-title {
+    width: 500px;
+    color: white;
+  }
+
+  .qna-title a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .qna-userid {
+    width: 200px;
+    color: white;
+  }
+
+  div form,
+  div button {
+    text-align: right;
+  }
+
+  #write {
+    color: white;
+    width: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+  }
+
+  #write:hover {
+    font-weight: bold;
+  }

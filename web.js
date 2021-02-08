@@ -8,6 +8,7 @@ const path = require('path');
 var session = require('express-session');
 var http = require('http');
 const { Console } = require('console');
+const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 
 
 const router = express.Router();
@@ -37,7 +38,7 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.json());
 
-app.listen(8002, function () {
+app.listen(8020, function () {
     console.log('server running at http://127.0.0.1:52273');
 });
 //미들웨어 장착
@@ -98,6 +99,114 @@ app.use('/locationcss', express.static(__dirname + '/location/location.css'));
 app.use('/issuejs', express.static(__dirname + '/issue/issue.js'));
 app.use('/issuecss', express.static(__dirname + '/issue/issue.css'));
 
+//qna
+app.use('/qnajs', express.static(__dirname + '/qna/qna.js'));
+app.use('/qnacss', express.static(__dirname + '/qna/qna.css'));
+app.use('/qnabg', express.static(__dirname + '/qna/image/qnabg.mp4'));
+//qnadetail
+app.use('/qnadetailjs', express.static(__dirname + '/qna/qnadetail.js'));
+app.use('/qnadetailcss', express.static(__dirname + '/qna/qnadetail.css'));
+app.use('/qnabg', express.static(__dirname + '/qna/image/qnabg.mp4'));
+
+//qna
+app.get('/qna.html', function(request,response){
+    fs.readFile(__dirname + '/qna/qna.html', 'utf8', function(error,data){
+        client.query('SELECT * FROM QNAboard ORDER BY No DESC', function (error, results) {
+            response.send(ejs.render(data, {
+            data: results
+            }));
+        });
+    });
+});
+app.get('/qnadetail.html/:No', function(request,response){
+    var body = request.params
+    fs.readFile(__dirname + '/qna/qnadetail.html', 'utf8', function(error,data){
+         client.query('SELECT* FROM QNAboard where No = ?', [body.No], function (error, results) {
+            console.log('detail : ', results);
+            console.log('detail : ', results[0].title);
+            response.send(ejs.render(data, {
+                data: results
+            }));
+        });
+    });
+});
+app.post('/qnawrite', function (request, response) {
+    var body = request.body;
+    var session = request.session;
+    //     // 데이터베이스 쿼리를 실행합니다.
+    client.query('insert into QNAboard (title,writter,article) values (?,?,?)', [body.title, session.userid, body.article], function () {
+        // 응답합니다.
+        console.log([body.title, session.userid, body.article]);
+        response.redirect('/qna.html');
+    });
+});
+app.get('/qnawrite.html', function(request,response){
+    fs.readFile(__dirname + '/qna/qnawrite.html', 'utf8', function(error,data){
+        client.query('SELECT * FROM QNAboard ORDER BY No DESC', function (error, results) {
+            if (request.session.loggedin) {
+                response.send(ejs.render(data, {
+                    data: request.session.userid
+                }));
+            } else {
+                response.redirect('/login.html');
+            }
+        });
+    });
+});
+app.get('/qnaupdate.html/:No', function(request,response){
+    var body = request.params
+    console.log(body);
+    fs.readFile(__dirname + '/qna/qnaupdate.html' , 'utf8' , function(error,data){
+        client.query('SELECT * FROM QNAboard where No = ? ', [body.No], function (error, results) {
+            console.log(results)
+            var session = request.session.userid;
+            var userid = results[0].writter;
+            if (session == userid) {
+                response.send(ejs.render(data, {
+                    data: results
+                }));
+            } else {
+                response.send('<script>alert("해당 작성자가 아닙니다.");history.back();</script>');
+            }
+        });
+    });
+});
+
+
+// 해당 게시판 수정
+app.post('/qnaupdate', function (request, response) {
+    var body = request.body;
+    console.log([body.title, body.article, body.No]);
+    //     // 데이터베이스 쿼리를 실행합니다.
+    client.query('update QNAboard set title= ?, article= ? where No= ?', [body.title, body.article, body.No], function () {
+        // 응답합니다.
+        response.redirect('/qna.html');
+    });
+});
+
+
+
+app.get('/deleteQna/:No/:writter', function (request, response) {
+    var body = request.params
+    var session = request.session.userid;
+    console.log('body.No', body.No, 'body.userid', body.writter, 'session', session);
+    //     // 데이터베이스 쿼리를 실행합니다.
+    if (request.session.loggedin) {
+        if (session == body.writter) {
+            client.query('delete from QNAboard where No = ?', [body.No], function () {
+                // 응답합니다.
+                response.redirect('/qna.html');
+            });
+        } else {
+            response.send('<script>alert("해당 작성자가 아닙니다.");history.back();</script>');
+        }
+    } else {
+        response.redirect('/login.html');
+    }
+});
+
+
+
 
 
 // 서버를 실행합니다.
@@ -123,15 +232,17 @@ app.get('/header.html', function (request, response) {
             console.log(__dirname + '/total/totalheader.html');
             response.send(data);
         }
-
     });
 });
+
+
+
 
 app.get('/issue.html', function(request, response){
     fs.readFile(__dirname + '/issue/issue.html', 'utf8', function(error,data){
         response.send(data);
-    })
-})
+    });
+});
 
 app.get('/login.html', function (request, response) {
     // response.render('index');
